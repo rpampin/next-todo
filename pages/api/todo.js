@@ -4,17 +4,18 @@ import Todo from "../../models/todo";
 const handler = (req, res) => {
   if (req.method === "POST") {
     const { title, notes } = req.body;
-    console.log(title);
-    // let todo = new Todo({
-    //   title,
-    //   notes
-    // });
-    // todo
-    //   .save()
-    //   .then(r => {})
-    //   .catch(err => {
-    //     res.status(400).send(err);
-    //   });
+    let todo = new Todo({
+      title,
+      notes
+    });
+    todo
+      .save()
+      .then(r => {
+        res.status(200).json(r);
+      })
+      .catch(err => {
+        res.status(400).send(err);
+      });
   }
 };
 
