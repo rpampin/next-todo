@@ -1,81 +1,93 @@
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import Layout from "../../components/Layout";
 
 export default function Create() {
   return (
     <Layout>
-      <form autoComplete="off">
-        <div class="form-group">
-          <label for="folder">Folder</label>
-          <select class="form-control" id="folder"></select>
+      <form action="/api/todo" method="post" autoComplete="off">
+        <div className="form-group">
+          <label htmlFor="folder">Folder</label>
+          <select className="form-control" id="folder"></select>
         </div>
-        <div class="form-group">
-          <label for="title">Title</label>
-          <input class="form-control" id="title" />
+        <div className="form-group">
+          <label htmlFor="title">Title</label>
+          <input className="form-control" id="title" name="title" />
         </div>
-        <div class="form-group">
-          <label for="notes">Notes</label>
-          <textarea class="form-control" id="notes" />
+        <div className="form-group">
+          <label htmlFor="notes">Notes</label>
+          <textarea className="form-control" id="notes" name="notes" />
         </div>
-        <div class="form-group">
-          <label for="input-type">Priority</label>
+        <div className="form-group">
+          <label htmlFor="input-type">Priority</label>
           <div id="input-type">
-            <div class="form-check form-check-inline">
+            <div className="form-check form-check-inline">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
-                name="priorityOptions"
+                name="priority"
                 id="priorityHigh"
                 value="High"
               />
-              <label class="form-check-label" for="priorityHigh">
+              <label className="form-check-label" htmlFor="priorityHigh">
                 High
               </label>
             </div>
-            <div class="form-check form-check-inline">
+            <div className="form-check form-check-inline">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
-                name="priorityOptions"
+                name="priority"
                 id="priorityMedium"
                 value="Medium"
               />
-              <label class="form-check-label" for="priorityMedium">
+              <label className="form-check-label" htmlFor="priorityMedium">
                 Medium
               </label>
             </div>
-            <div class="form-check form-check-inline">
+            <div className="form-check form-check-inline">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="radio"
-                name="priorityOptions"
+                name="priority"
                 id="priorityLow"
                 value="Low"
               />
-              <label class="form-check-label" for="priorityLow">
+              <label className="form-check-label" htmlFor="priorityLow">
                 Low
               </label>
             </div>
           </div>
         </div>
-        <div class="custom-control custom-switch">
+        <div className="custom-control custom-switch">
           <input
+            id="addDate"
             type="checkbox"
-            class="custom-control-input"
-            id="addDeadline"
+            className="custom-control-input"
+            data-toggle="collapse"
+            data-target="#collapseExample"
           />
-          <label class="custom-control-label" for="addDeadline">
-            Add deadline?
+          <label className="custom-control-label" htmlFor="addDate">
+            Add a date?
           </label>
         </div>
-        <div class="form-group">
-          <label for="date">Date</label>
-          <input type="Date" class="form-control" id="date" />
+        <div className="collapse" id="collapseExample">
+          <div className="form-group">
+            <label htmlFor="date">Date</label>
+            <input type="date" className="form-control" id="date" name="date" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="dueDate">Due Date</label>
+            <input
+              type="date"
+              className="form-control"
+              id="dueDate"
+              name="dueDate"
+            />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="dueDate">Due Date</label>
-          <input type="Date" class="form-control" id="dueDate" />
-        </div>
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </form>
