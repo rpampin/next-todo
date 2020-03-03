@@ -1,6 +1,3 @@
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
 import Layout from "../../components/Layout";
 
 export default function Create() {
