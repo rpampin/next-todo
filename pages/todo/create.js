@@ -72,16 +72,37 @@ export default function Create() {
         <div className="collapse" id="collapseExample">
           <div className="form-group">
             <label htmlFor="date">Date</label>
-            <input type="date" className="form-control" id="date" name="date" />
+            <div className="form-inline">
+              <input
+                type="date"
+                className="form-control"
+                id="date"
+                name="date"
+              />
+              <input
+                type="time"
+                className="form-control"
+                id="dateTime"
+                name="dateTime"
+              />
+            </div>
           </div>
           <div className="form-group">
             <label htmlFor="dueDate">Due Date</label>
-            <input
-              type="date"
-              className="form-control"
-              id="dueDate"
-              name="dueDate"
-            />
+            <div className="form-inline">
+              <input
+                type="date"
+                className="form-control"
+                id="dueDate"
+                name="dueDate"
+              />
+              <input
+                type="time"
+                className="form-control"
+                id="dueDateTime"
+                name="dueDateTime"
+              />
+            </div>
           </div>
         </div>
         <button type="submit" className="btn btn-primary">
