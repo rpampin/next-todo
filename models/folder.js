@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const Folder = new Schema({
   name: {
     type: String,
+    unique: true,
     required: true
   },
   icon: {
@@ -17,4 +18,4 @@ const Folder = new Schema({
   ]
 });
 
-export default mongoose.models.Folder || mongoose.model("Folder", Todo);
+export default mongoose.models.Folder || mongoose.model("Folder", Folder);

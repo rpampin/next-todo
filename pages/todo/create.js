@@ -72,36 +72,44 @@ export default function Create() {
         <div className="collapse" id="collapseExample">
           <div className="form-group">
             <label htmlFor="date">Date</label>
-            <div className="form-inline">
-              <input
-                type="date"
-                className="form-control"
-                id="date"
-                name="date"
-              />
-              <input
-                type="time"
-                className="form-control"
-                id="dateTime"
-                name="dateTime"
-              />
+            <div className="form-row">
+              <div className="col">
+                <input
+                  type="date"
+                  className="form-control"
+                  id="date"
+                  name="date"
+                />
+              </div>
+              <div className="col">
+                <input
+                  type="time"
+                  className="form-control"
+                  id="dateTime"
+                  name="dateTime"
+                />
+              </div>
             </div>
           </div>
           <div className="form-group">
             <label htmlFor="dueDate">Due Date</label>
-            <div className="form-inline">
-              <input
-                type="date"
-                className="form-control"
-                id="dueDate"
-                name="dueDate"
-              />
-              <input
-                type="time"
-                className="form-control"
-                id="dueDateTime"
-                name="dueDateTime"
-              />
+            <div className="form-row">
+              <div className="col">
+                <input
+                  type="date"
+                  className="form-control"
+                  id="dueDate"
+                  name="dueDate"
+                />
+              </div>
+              <div className="col">
+                <input
+                  type="time"
+                  className="form-control"
+                  id="dueDateTime"
+                  name="dueDateTime"
+                />
+              </div>
             </div>
           </div>
         </div>

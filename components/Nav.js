@@ -10,6 +10,10 @@ const Nav = props => {
       path: "/todos"
     },
     {
+      name: "Create Folder",
+      path: "/folder/create"
+    },
+    {
       name: "Create Todo",
       path: "/todo/create"
     }
@@ -17,9 +21,9 @@ const Nav = props => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <a className="navbar-brand" href="#">
-        Navbar
-      </a>
+      <Link href="/">
+        <a className="navbar-brand">Navbar</a>
+      </Link>
       <button
         className="navbar-toggler"
         type="button"
@@ -34,7 +38,12 @@ const Nav = props => {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
           {links.map((l, i) => (
-            <li key={i} className={`nav-item ${l.path === route.pathname ? 'active' : ''}`}>
+            <li
+              key={i}
+              className={`nav-item ${
+                l.path === route.pathname ? "active" : ""
+              }`}
+            >
               <Link href={l.path}>
                 <a className="nav-link">{l.name}</a>
               </Link>

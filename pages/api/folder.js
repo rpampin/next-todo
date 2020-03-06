@@ -1,18 +1,15 @@
-import Todo from "../../models/todo";
+import Folder from "../../models/folder";
 import connectDb from "../../middleware/db";
 
 const handler = (req, res) => {
   switch (req.method) {
     case "POST":
-      const { title, notes, date, dueDate, priority } = req.body;
-      let todo = new Todo({
-        title,
-        notes,
-        date,
-        dueDate,
-        priority
+      const { name, icon } = req.body;
+      let folder = new Folder({
+        name,
+        icon
       });
-      todo.save(function(err) {
+      folder.save(function(err) {
         if (err) res.status(400).send(err);
         // saved!
         res.status(200).json(r);
