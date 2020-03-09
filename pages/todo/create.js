@@ -9,7 +9,9 @@ export default class Create extends React.Component {
     this.titleOnChange = this.titleOnChange.bind(this);
     this.notesOnChange = this.notesOnChange.bind(this);
     this.dateOnChange = this.dateOnChange.bind(this);
+    this.dateTimeOnChange = this.dateTimeOnChange.bind(this);
     this.dueDateOnChange = this.dueDateOnChange.bind(this);
+    this.dueDateTimeOnChange = this.dueDateTimeOnChange.bind(this);
     this.priorityOnChange = this.priorityOnChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
@@ -18,7 +20,9 @@ export default class Create extends React.Component {
       title: "",
       notes: "",
       date: "",
+      dateTime: "",
       dueDate: "",
+      dueDateTime: "",
       priority: ""
     };
   }
@@ -53,8 +57,19 @@ export default class Create extends React.Component {
       priority: e.target.value
     });
   }
+  dateTimeOnChange(e) {
+    this.setState({
+      dateTime: e.target.value
+    });
+  }
+  dueDateTimeOnChange(e) {
+    this.setState({
+      dueDateTime: e.target.value
+    });
+  }
 
-  onSubmit() {
+  onSubmit(e) {
+    e.preventDefault();
     console.debug(this.state);
     alert("saved");
     Router.push("/");
@@ -63,12 +78,13 @@ export default class Create extends React.Component {
   render() {
     return (
       <Layout>
-        <form autoComplete="off">
+        <form onSubmit={this.onSubmit} autoComplete="off">
           <div className="form-group">
             <label htmlFor="folder">Folder</label>
             <select
               className="form-control"
               id="folder"
+              required
               value={this.state.folder}
               onChange={this.folderOnChange}
             ></select>
@@ -167,6 +183,7 @@ export default class Create extends React.Component {
                     className="form-control"
                     id="dateTime"
                     name="dateTime"
+                    onChange={this.dateTimeOnChange}
                   />
                 </div>
               </div>
@@ -189,16 +206,13 @@ export default class Create extends React.Component {
                     className="form-control"
                     id="dueDateTime"
                     name="dueDateTime"
+                    onChange={this.dueDateTimeOnChange}
                   />
                 </div>
               </div>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={this.onSubmit}
-            className="btn btn-primary"
-          >
+          <button type="submit" className="btn btn-primary">
             Submit
           </button>
         </form>
