@@ -1,22 +1,22 @@
 import React from "react";
+import axios from "axios";
 import Router from "next/router";
 import Layout from "../../components/Layout";
 
 export default class Create extends React.Component {
+  static async getInitialProps(ctx) {
+    let res = await axios.get("/api/folder");
+    return { folders: res.data };
+  }
+
   constructor(props) {
     super(props);
-    this.folderOnChange = this.folderOnChange.bind(this);
-    this.titleOnChange = this.titleOnChange.bind(this);
-    this.notesOnChange = this.notesOnChange.bind(this);
-    this.dateOnChange = this.dateOnChange.bind(this);
-    this.dateTimeOnChange = this.dateTimeOnChange.bind(this);
-    this.dueDateOnChange = this.dueDateOnChange.bind(this);
-    this.dueDateTimeOnChange = this.dueDateTimeOnChange.bind(this);
-    this.priorityOnChange = this.priorityOnChange.bind(this);
+
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
 
     this.state = {
-      folder: {},
+      folderId: {},
       title: "",
       notes: "",
       date: "",
@@ -27,55 +27,32 @@ export default class Create extends React.Component {
     };
   }
 
-  folderOnChange(e) {
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+
     this.setState({
-      folder: e.target.value
-    });
-  }
-  titleOnChange(e) {
-    this.setState({
-      title: e.target.value
-    });
-  }
-  notesOnChange(e) {
-    this.setState({
-      notes: e.target.value
-    });
-  }
-  dateOnChange(e) {
-    this.setState({
-      date: e.target.value
-    });
-  }
-  dueDateOnChange(e) {
-    this.setState({
-      dueDate: e.target.value
-    });
-  }
-  priorityOnChange(e) {
-    this.setState({
-      priority: e.target.value
-    });
-  }
-  dateTimeOnChange(e) {
-    this.setState({
-      dateTime: e.target.value
-    });
-  }
-  dueDateTimeOnChange(e) {
-    this.setState({
-      dueDateTime: e.target.value
+      [name]: value
     });
   }
 
   onSubmit(e) {
     e.preventDefault();
-    console.debug(this.state);
-    alert("saved");
-    Router.push("/");
+    axios
+      .post("/api/todo", this.state)
+      .then(res => {
+        console.log(res.data);
+        Router.back();
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 
   render() {
+    const { folders } = this.props;
+
     return (
       <Layout>
         <form onSubmit={this.onSubmit} autoComplete="off">
@@ -83,19 +60,27 @@ export default class Create extends React.Component {
             <label htmlFor="folder">Folder</label>
             <select
               className="form-control"
-              id="folder"
+              id="folderId"
+              name="folderId"
               required
-              value={this.state.folder}
-              onChange={this.folderOnChange}
-            ></select>
+              value={this.state.folderId}
+              onChange={this.handleInputChange}
+            >
+              {folders.map((folder, index) => (
+                <option key={index} value={folder._id}>
+                  {folder.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-group">
             <label htmlFor="title">Title</label>
             <input
               className="form-control"
               id="title"
+              name="title"
               value={this.state.title}
-              onChange={this.titleOnChange}
+              onChange={this.handleInputChange}
               required
             />
           </div>
@@ -104,8 +89,9 @@ export default class Create extends React.Component {
             <textarea
               className="form-control"
               id="notes"
+              name="notes"
               value={this.state.notes}
-              onChange={this.notesOnChange}
+              onChange={this.handleInputChange}
             />
           </div>
           <div className="form-group">
@@ -115,10 +101,10 @@ export default class Create extends React.Component {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="priority"
                   id="priorityHigh"
+                  name="priority"
                   value="High"
-                  onChange={this.priorityOnChange}
+                  onChange={this.handleInputChange}
                 />
                 <label className="form-check-label" htmlFor="priorityHigh">
                   High
@@ -128,10 +114,10 @@ export default class Create extends React.Component {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="priority"
                   id="priorityMedium"
+                  name="priority"
                   value="Medium"
-                  onChange={this.priorityOnChange}
+                  onChange={this.handleInputChange}
                 />
                 <label className="form-check-label" htmlFor="priorityMedium">
                   Medium
@@ -141,10 +127,10 @@ export default class Create extends React.Component {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="priority"
                   id="priorityLow"
+                  name="priority"
                   value="Low"
-                  onChange={this.priorityOnChange}
+                  onChange={this.handleInputChange}
                 />
                 <label className="form-check-label" htmlFor="priorityLow">
                   Low
@@ -173,8 +159,9 @@ export default class Create extends React.Component {
                     type="date"
                     className="form-control"
                     id="date"
+                    name="date"
                     value={this.state.date}
-                    onChange={this.dateOnChange}
+                    onChange={this.handleInputChange}
                   />
                 </div>
                 <div className="col">
@@ -183,7 +170,7 @@ export default class Create extends React.Component {
                     className="form-control"
                     id="dateTime"
                     name="dateTime"
-                    onChange={this.dateTimeOnChange}
+                    onChange={this.handleInputChange}
                   />
                 </div>
               </div>
@@ -196,8 +183,9 @@ export default class Create extends React.Component {
                     type="date"
                     className="form-control"
                     id="dueDate"
+                    name="dueDate"
                     value={this.state.dueDate}
-                    onChange={this.dueDateOnChange}
+                    onChange={this.handleInputChange}
                   />
                 </div>
                 <div className="col">
@@ -206,7 +194,7 @@ export default class Create extends React.Component {
                     className="form-control"
                     id="dueDateTime"
                     name="dueDateTime"
-                    onChange={this.dueDateTimeOnChange}
+                    onChange={this.handleInputChange}
                   />
                 </div>
               </div>

@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const Todo = new Schema({
-  // folder: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Folder"
-  // },
+  folder: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Folder"
+  },
   title: {
     type: String,
     required: true
