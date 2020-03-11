@@ -16,7 +16,7 @@ export default class Create extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
 
     this.state = {
-      folderId: {},
+      folderId: props.folders[0]._id,
       title: "",
       notes: "",
       date: "",

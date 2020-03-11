@@ -1,19 +1,17 @@
 import Folder from "../../models/folder";
 import connectDb from "../../middleware/db";
 
-const handler = (req, res) => {
+const handler = async (req, res) => {
   switch (req.method) {
     case "GET":
-      Folder.find()
-        .populate("todos.todo")
-        .exec(function(err, folders) {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(folders);
-            res.json(folders);
-          }
-        });
+      try {
+        let folder = req.query.id
+          ? await Folder.findById(req.query.id)
+          : await Folder.find().populate('todos');
+        res.status(200).json(folder);
+      } catch (err) {
+        res.status(500).json({ message: err });
+      }
       break;
     case "POST":
       const { name, icon } = req.body;
@@ -21,13 +19,15 @@ const handler = (req, res) => {
         name,
         icon
       });
-      folder.save(function(err) {
-        if (err) res.status(400).send(err);
+      try {
+        await folder.save();
         res.status(200).json({ message: "folder saved successfully" });
-      });
+      } catch (err) {
+        res.status(500).json({ message: err });
+      }
       break;
     default:
-      res.status(405).end();
+      res.status(405);
       break;
   }
 };
