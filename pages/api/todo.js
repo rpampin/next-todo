@@ -6,17 +6,20 @@ const handler = async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
-        let todos = await Todo.find().populate("folder", "_id name");
+        let todos = req.query.id
+          ? await Todo.findById(req.query.id)
+          : await Todo.find().populate("folder", "_id name");
         res.status(200).json(todos);
       } catch (err) {
         res.status(500).json({ message: err });
       }
       break;
     case "POST":
-      const { folderId, title, notes, date, dueDate, priority } = req.body;
-      
+      const { _id, folder, title, notes, date, dueDate, priority } = req.body;
+
       let todo = new Todo({
-        folder: { _id: folderId },
+        _id: _id,
+        folder: { _id: folder },
         title,
         notes,
         date,
@@ -25,12 +28,20 @@ const handler = async (req, res) => {
       });
 
       try {
-        let newTodo = await todo.save();
-        let newTodoFolder = await Folder.findById(folderId);
-        newTodoFolder.todos.push(newTodo);
-        await newTodoFolder.save();
+        let newTodo = _id
+          ? await Todo.findByIdAndUpdate(_id, todo)
+          : await todo.save();
+        await Folder.findOneAndUpdate(
+          { _id: folder, todos: { $nin: newTodo._id } },
+          {
+            $push: {
+              todos: newTodo._id
+            }
+          }
+        );
         res.status(200).json({ message: "todo saved successfully" });
       } catch (err) {
+        console.log(err);
         res.status(500).json({ message: err });
       }
       break;

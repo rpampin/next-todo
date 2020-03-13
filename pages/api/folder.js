@@ -7,7 +7,7 @@ const handler = async (req, res) => {
       try {
         let folder = req.query.id
           ? await Folder.findById(req.query.id)
-          : await Folder.find().populate('todos');
+          : await Folder.find();
         res.status(200).json(folder);
       } catch (err) {
         res.status(500).json({ message: err });

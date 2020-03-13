@@ -1,9 +1,8 @@
+import Link from "next/link";
 import Router from "next/router";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Trash, Pen } from "react-bootstrap-icons";
 import Layout from "../components/Layout";
-
 function Todos({ todos }) {
   function deleteTodo(todoId) {
     axios
@@ -31,8 +30,13 @@ function Todos({ todos }) {
               <td>{item.title}</td>
               <td>{item.priority}</td>
               <td>{item.date}</td>
-              <td onClick={() => deleteTodo(item._id)}>
-                <FontAwesomeIcon icon={faTrash} />
+              <td style={{ width: 68 }}>
+                <Link href={"/todo/[id]"} as={`/todo/${item._id}`}>
+                  <a>
+                    <Pen color="black"  size={21} />
+                  </a>
+                </Link>
+                <Trash size={21} onClick={() => deleteTodo(item._id)} />
               </td>
             </tr>
           ))}
