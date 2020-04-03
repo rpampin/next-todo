@@ -1,14 +1,15 @@
 import Link from "next/link";
 import Router from "next/router";
 import axios from "axios";
-import { Trash, Pen } from "react-bootstrap-icons";
+import * as Icon from "react-bootstrap-icons";
+
 import Layout from "../components/Layout";
 function Todos({ todos }) {
   function deleteTodo(todoId) {
     axios
       .delete(`/api/todo?id=${todoId}`)
-      .then(res => Router.push("/todos"))
-      .catch(err => console.log(err));
+      .then((res) => Router.push("/todos"))
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -26,17 +27,21 @@ function Todos({ todos }) {
         <tbody>
           {todos.map((item, index) => (
             <tr key={index}>
-              <td>{item.folder.name}</td>
+              <td>
+                {React.createElement(Icon[item.folder.icon], { size: 21 })}
+                &nbsp;
+                {item.folder.name}
+              </td>
               <td>{item.title}</td>
               <td>{item.priority}</td>
-              <td>{item.date}</td>
+              <td>{item.date ? new Date(item.date).toLocaleDateString() : ''}</td>
               <td style={{ width: 68 }}>
                 <Link href={"/todo/[id]"} as={`/todo/${item._id}`}>
                   <a>
-                    <Pen color="black"  size={21} />
+                    <Icon.Pen color="black" size={21} />
                   </a>
                 </Link>
-                <Trash size={21} onClick={() => deleteTodo(item._id)} />
+                <Icon.Trash size={21} onClick={() => deleteTodo(item._id)} />
               </td>
             </tr>
           ))}
@@ -46,7 +51,7 @@ function Todos({ todos }) {
   );
 }
 
-Todos.getInitialProps = async ctx => {
+Todos.getInitialProps = async (ctx) => {
   const res = await axios.get("/api/todo");
   return { todos: res.data };
 };

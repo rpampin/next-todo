@@ -8,7 +8,7 @@ const handler = async (req, res) => {
       try {
         let todos = req.query.id
           ? await Todo.findById(req.query.id)
-          : await Todo.find().populate("folder", "_id name");
+          : await Todo.find().populate("folder", "_id name icon");
         res.status(200).json(todos);
       } catch (err) {
         res.status(500).json({ message: err });

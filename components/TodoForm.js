@@ -1,43 +1,58 @@
 import React from "react";
 import axios from "axios";
 import Router from "next/router";
+import * as Icon from "react-bootstrap-icons";
 
 export default class TodoForm extends React.Component {
   componentDidMount() {
     axios
       .get("/api/folder")
-      .then(res =>
+      .then((res) =>
         this.setState({
           folders: res.data,
-          folder: res.data.length > 0 ? res.data[0]._id : ""
+          folder: res.data.length > 0 ? res.data[0]._id : "",
         })
       )
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   constructor(props) {
     super(props);
 
+    this.folderIcon = Icon["Inbox"];
     this.onSubmit = this.onSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.deadlineChange = this.deadlineChange.bind(this);
     this.allDayChange = this.allDayChange.bind(this);
+    this.updateFolderIcon = this.updateFolderIcon.bind(this);
 
     let todo = { ...props.todo };
-
     if (todo.date) {
       todo.deadline = true;
       todo.allDay = !todo.dueDate;
       const dateParts = todo.date.split("T");
       todo.date = dateParts[0];
-      todo.startTime = dateParts[1].substring(0, 5);
-      todo.endTime = todo.dueDate.split("T")[1].substring(0, 5);
+      if (!todo.allDay) {
+        todo.startTime = dateParts[1].substring(0, 5);
+        todo.endTime = todo.dueDate.split("T")[1].substring(0, 5);
+      }
     }
 
     this.state = {
       folders: [],
-      ...todo
+      ...todo,
     };
+  }
+
+  updateFolderIcon() {
+    let iconName = "Inbox";
+    if (this.state.folders) {
+      const folder =
+        this.state.folders.filter((f) => f._id === this.state.folder)[0] ||
+        null;
+      if (folder) iconName = folder.icon;
+    }
+    return Icon[iconName];
   }
 
   handleInputChange(event) {
@@ -46,7 +61,7 @@ export default class TodoForm extends React.Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -57,7 +72,7 @@ export default class TodoForm extends React.Component {
         date: "",
         startTime: "",
         endTime: "",
-        allDay: false
+        allDay: false,
       });
   }
 
@@ -66,7 +81,7 @@ export default class TodoForm extends React.Component {
     if (value)
       this.setState({
         startTime: "",
-        endTime: ""
+        endTime: "",
       });
   }
 
@@ -81,7 +96,7 @@ export default class TodoForm extends React.Component {
       notes: todo.notes,
       date: todo.date,
       dueDate: todo.dueDate,
-      priority: todo.priority
+      priority: todo.priority,
     } = this.state);
 
     if (this.state.deadline && !this.state.allDay) {
@@ -97,11 +112,10 @@ export default class TodoForm extends React.Component {
 
     axios
       .post("/api/todo", todo)
-      .then(res => {
-        console.log(res.data);
+      .then((res) => {
         Router.back();
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   }
@@ -111,20 +125,27 @@ export default class TodoForm extends React.Component {
       <form onSubmit={this.onSubmit} autoComplete="off">
         <div className="form-group">
           <label htmlFor="folder">Folder</label>
-          <select
-            className="form-control"
-            id="folder"
-            name="folder"
-            required
-            value={this.state.folder}
-            onChange={this.handleInputChange}
-          >
-            {this.state.folders.map((folder, index) => (
-              <option key={index} value={folder._id}>
-                {folder.name}
-              </option>
-            ))}
-          </select>
+          <div className="input-group mb-3">
+            <div className="input-group-prepend">
+              <label className="input-group-text" htmlFor="folderIcon">
+                {React.createElement(this.updateFolderIcon(), { size: 21 })}
+              </label>
+            </div>
+            <select
+              className="form-control"
+              id="folder"
+              name="folder"
+              required
+              value={this.state.folder}
+              onChange={this.handleInputChange}
+            >
+              {this.state.folders.map((folder, index) => (
+                <option key={index} value={folder._id}>
+                  {folder.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="title">Title</label>
@@ -208,7 +229,7 @@ export default class TodoForm extends React.Component {
                   id="deadline"
                   name="deadline"
                   checked={this.state.deadline || false}
-                  onChange={function(ev) {
+                  onChange={function (ev) {
                     this.handleInputChange(ev);
                     this.deadlineChange(ev);
                   }.bind(this)}
@@ -223,7 +244,7 @@ export default class TodoForm extends React.Component {
               style={{
                 display: "grid",
                 alignContent: "center",
-                display: !this.state.deadline || false ? "none" : "grid"
+                display: !this.state.deadline || false ? "none" : "grid",
               }}
             >
               <div className="custom-control custom-checkbox">
@@ -233,7 +254,7 @@ export default class TodoForm extends React.Component {
                   id="allDay"
                   name="allDay"
                   checked={this.state.allDay || false}
-                  onChange={function(ev) {
+                  onChange={function (ev) {
                     this.handleInputChange(ev);
                     this.allDayChange(ev);
                   }.bind(this)}
@@ -250,7 +271,7 @@ export default class TodoForm extends React.Component {
             <div
               className="col"
               style={{
-                display: !this.state.deadline || false ? "none" : "block"
+                display: !this.state.deadline || false ? "none" : "block",
               }}
             >
               <input
@@ -269,7 +290,7 @@ export default class TodoForm extends React.Component {
                 display:
                   this.state.allDay || !this.state.deadline || false
                     ? "none"
-                    : "block"
+                    : "block",
               }}
             >
               <input
@@ -288,7 +309,7 @@ export default class TodoForm extends React.Component {
                 display:
                   this.state.allDay || !this.state.deadline || false
                     ? "none"
-                    : "block"
+                    : "block",
               }}
             >
               <input
